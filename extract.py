@@ -1,7 +1,7 @@
-import time
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import time
 
 # Define headers to mimic a real browser request
 HEADERS = {
@@ -24,24 +24,43 @@ def fetching_content(url):
         print(f"Error requesting {url}: {e}")
         return None
 
-def extract_product_data(article):
+def extract_product_data(product_card):
     """
-    Extracts product information from an article element.
+    Extracts product information from a collection card element.
     """
-    product_title = article.find('h3', class_='product-title').text
-    product_element = article.find('div', class_='price-container')
-    price = product_element.find('span', class_='price').text
-
-    details = product_element.find_all('p')
-    if len(details) >= 5:
-        rating = details[1].text
-        colors = details[2].text
-        size = details[3].text
-        gender = details[4].text
-    else:
-        rating = colors = size = gender = "N/A"
-
-    products = {
+    try:
+        product_title = product_card.find('h3', class_='product-title').text.strip()
+    except AttributeError:
+        product_title = "N/A"
+    
+    try:
+        price_element = product_card.find('span', class_='price')
+        if price_element:
+            price = price_element.text.strip()
+        else:
+            price_paragraph = product_card.find('p', class_='price')
+            price = price_paragraph.text.strip() if price_paragraph else "N/A"
+    except AttributeError:
+        price = "N/A"
+    
+    # Finding all detail paragraphs
+    detail_paragraphs = product_card.find_all('p', style="font-size: 14px; color: #777;")
+    
+    rating = colors = size = gender = "N/A"
+    
+    if detail_paragraphs:
+        for p in detail_paragraphs:
+            text = p.text.strip()
+            if "Rating:" in text:
+                rating = text
+            elif "Colors" in text:
+                colors = text
+            elif "Size:" in text:
+                size = text
+            elif "Gender:" in text:
+                gender = text
+    
+    product = {
         "Title": product_title,
         "Price": price,
         "Rating": rating,
@@ -49,52 +68,54 @@ def extract_product_data(article):
         "Size": size,
         "Gender": gender,
     }
-
-    return products
-
+    return product
 
 def scrape_product(base_url, start_page=1, delay=2):
     """
     Scrapes product data from the paginated product pages of the given base URL.
-
     Args:
         base_url (str): Base URL with a placeholder for page number (used from page 2 onward).
         start_page (int): Page number to start scraping from.
         delay (int): Delay in seconds between page requests.
-
     Returns:
         list: List of dictionaries containing product data.
     """
     data = []
     page_number = start_page
-
-    while True:
+    
+    while page_number < 5:  # for experimentation, will be changed to True, when code is working
         if page_number == 1:
             url = 'https://fashion-studio.dicoding.dev/'  # First page
         else:
             url = base_url.format(page_number)  # Subsequent pages
-
+            
         print(f"Scraping page: {url}")
-
         content = fetching_content(url)
+        
         if content:
             soup = BeautifulSoup(content, "html.parser")
-            articles_element = soup.find_all('div', {"id": "collectionList"}, class_='collection-grid')
-            for article in articles_element:
-                product = extract_product_data(article)
-                data.append(product)
-
-            next_button = soup.find('li', class_='page-item next')
-            if next_button:
-                page_number += 1
-                time.sleep(delay)
+            collection_grid = soup.find('div', class_='collection-grid', id='collectionList')
+            
+            if collection_grid:
+                product_cards = collection_grid.find_all('div', class_='collection-card')
+                
+                for card in product_cards:
+                    product = extract_product_data(card)
+                    data.append(product)
+                
+                next_button = soup.find('li', class_='page-item next')
+                if next_button and next_button.find('a'):
+                    page_number += 1
+                    time.sleep(delay)
+                else:
+                    break
             else:
+                print("No collection grid found on the page")
                 break
         else:
             break
-
+            
     return data
-
 
 def main():
     """
@@ -102,8 +123,12 @@ def main():
     """
     BASE_URL = 'https://fashion-studio.dicoding.dev/page{}'
     all_products = scrape_product(BASE_URL)
-    df = pd.DataFrame(all_products)
-    print(df)
+    
+    if all_products:
+        df = pd.DataFrame(all_products)
+        print(df)
+    else:
+        print("No products were scraped.")
 
 if __name__ == '__main__':
     main()
