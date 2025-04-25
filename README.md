@@ -92,16 +92,16 @@ uv run main.py
 
 ### Unit Tests
 ```bash
-python -m pytest tests/ -v
+pytest tests/ -v
 ```
 
 ### Coverage Reports
 ```bash
 # Basic coverage
-pytest --cov=src tests/
+pytest --cov=utils tests/
 
 # HTML report (opens in browser)
-pytest --cov=src --cov-report=html && open htmlcov/index.html
+pytest --cov=utils --cov-report=html && open htmlcov/index.html
 ```
 
 ### Test Types
@@ -113,7 +113,7 @@ pytest --cov=src --cov-report=html && open htmlcov/index.html
 
 ---
 
-## 🏗️ Project Structure
+## 🏗️ Basic Project Structure
 
 ```
 etl-pipeline/
