@@ -38,7 +38,7 @@ async def pipeline(base_url, max_pages=50, output_format='csv'):
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(description="Fashion product scraper")
-    parser.add_argument("--pages", type=int, default=5, help="Maximum number of pages to scrape")
+    parser.add_argument("--pages", type=int, default=50, help="Maximum number of pages to scrape")
     parser.add_argument("--format", choices=['csv', 'json'], default='csv', help="Output format")
     return parser.parse_args()
 
