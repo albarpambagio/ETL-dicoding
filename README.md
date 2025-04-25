@@ -1,6 +1,6 @@
 # 🛠️ ETL Data Pipeline Project
 
-A modular and scalable ETL (Extract, Transform, Load) pipeline for scraping, cleaning, and loading [Fashion Studio Website by Dicoding](https://fashion-studio.dicoding.dev/) data into a PostgreSQL database.
+A modular and scalable ETL (Extract, Transform, Load) pipeline for scraping, cleaning, and loading [Fashion Studio Website created by Dicoding](https://fashion-studio.dicoding.dev/) data into a CSV.
 
 ---
 
@@ -36,28 +36,13 @@ source venv/bin/activate      # On Linux/macOS
 # Install dependencies (including dev dependencies)
 uv pip install -e ".[dev]"
 ```
-
 ---
-
-### ⚙️ Environment Setup
-
-Create a `.env` file in the project root with your PostgreSQL credentials:
-
-```dotenv
-DB_USER=your_postgres_user
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=your_database
-```
-
----
-
 ### ▶️ Running the Pipeline
 
 ```bash
 uv run main.py
 ```
+---
 
 ---
 
