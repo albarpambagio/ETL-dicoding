@@ -7,6 +7,7 @@ wheels/
 *.egg-info
 .pytest_cache
 .coverage
+.env
 
 # Virtual environments
 .venv

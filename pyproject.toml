@@ -7,8 +7,10 @@ requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.13.4",
     "pandas>=2.2.3",
+    "psycopg2-binary>=2.9.10",
     "pytest>=8.3.5",
     "pytest-cov>=6.1.1",
+    "python-dotenv>=1.1.0",
     "requests>=2.32.3",
     "setuptools>=79.0.1",
     "sqlalchemy>=2.0.40",
