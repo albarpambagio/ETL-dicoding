@@ -1,14 +1,23 @@
-# Python-generated files
+# Byte-compiled / cache
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
-.pytest_cache
-.coverage
-.env
+*.py[cod]
+*.egg-info/
 
-# Virtual environments
-.venv
-fashion_products_20250425_165913.csv
+# Virtual environment
+.venv/
+
+# Test cache
+.pytest_cache/
+
+# Coverage reports
+.coverage
+
+# Output files
+*.csv
+
+# VSCode / IDE settings (optional, if used)
+.vscode/
+.idea/
+
+# Lock files (optional if using poetry or pipenv)
+uv.lock

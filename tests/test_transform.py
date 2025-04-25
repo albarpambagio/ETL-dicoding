@@ -53,7 +53,7 @@ async def test_transform_empty_data():
         "Colors": "",
         "Size": "",
         "Gender": "",
-        "Timestamp": ""
+        "Scraped_At": ""
     }]
     transformed = await transform_data(empty_data)
     assert transformed.empty

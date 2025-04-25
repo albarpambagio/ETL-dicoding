@@ -4,8 +4,7 @@ from datetime import datetime
 import argparse
 import sys
 
-# Import your modules
-# Update these imports to match your actual module structure
+# Import modules
 from utils.extract import fetch_content, extract_product_data, process_page, scrape_product_async
 from utils.transform import transform_data
 from utils.load import save_to_csv

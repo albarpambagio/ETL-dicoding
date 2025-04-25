@@ -6,6 +6,10 @@ from datetime import datetime
 import time
 import random
 
+# TODO
+# generate docstring
+# refactor (redundant max pages)
+
 # Define headers to mimic a real browser request
 HEADERS = {
     "User-Agent": (

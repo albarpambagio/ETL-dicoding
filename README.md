@@ -1,6 +1,43 @@
 # 🛠️ ETL Data Pipeline Project
 
-A modular and scalable ETL (Extract, Transform, Load) pipeline for scraping, cleaning, and loading [Fashion Studio Website](https://fashion-studio.dicoding.dev/) data into structured CSV files.
+A modular and scalable ETL pipeline that:
+1. **Extracts** product data from [Fashion Studio](https://fashion-studio.dicoding.dev/)
+2. **Transforms** raw data into clean, structured format
+3. **Loads** results to CSV with proper error handling
+
+---
+
+## 📦 Core Components
+
+### 🔍 `extract.py` (Web Scraper)
+- **Asynchronous scraping** using `aiohttp` for high performance
+- **Rate limiting** with semaphores and random delays to avoid bans
+- **Automatic retries** with exponential backoff (HTTP 429 handling)
+- **Pagination support** with batch processing (50 pages max)
+- **Data extraction** using BeautifulSoup (titles, prices, ratings, etc.)
+
+### ♻️ `transform.py` (Data Cleaning)
+- **Null handling**: Drops empty/duplicate records
+- **Price conversion**: USD → IDR with configurable exchange rate
+- **Text normalization**: 
+  - Extracts numeric ratings (4.5 from "Rating: 4.5")
+  - Parses color counts (3 from "3 Colors")
+- **Field standardization**: 
+  - Size formats (M, L, XL)
+  - Gender categories (Men/Women/Unisex)
+
+### 💾 `load.py` (Data Export)
+- **Async CSV writer** using `aiofiles` + pandas
+- **Automatic filename generation** with timestamps
+- **Directory creation** if not exists
+- **Empty data handling** with warning messages
+
+### 🧪 `tests/` (Quality Assurance)
+| Test Type       | Coverage                          | Key Features Verified              |
+|-----------------|-----------------------------------|------------------------------------|
+| `test_extract.py` | HTTP requests & HTML parsing      | Rate limiting, retry logic, data extraction |
+| `test_transform.py` | Data cleaning pipelines           | Price conversion, null handling, text parsing |
+| `test_load.py`    | File system operations            | CSV formatting, async file writes |
 
 ---
 
@@ -10,7 +47,7 @@ A modular and scalable ETL (Extract, Transform, Load) pipeline for scraping, cle
 
 | Requirement       | Installation Guide                     |
 |-------------------|----------------------------------------|
-| Python 3.10+      | [Download Python](https://www.python.org/downloads/) |
+| Python 3.13      | [Download Python](https://www.python.org/downloads/) |
 | UV (Ultra Venv)   | `pip install uv`                       |
 
 ---
@@ -47,13 +84,8 @@ pip install -e .
 ## ▶️ Running the Pipeline
 
 ```bash
-uv run main.py [--pages 50] [--format csv]
+uv run main.py 
 ```
-
-**Options**:
-- `--pages`: Number of pages to scrape (default: 50)
-- `--format`: Output format (csv/json, default: csv)
-
 ---
 
 ## 🧪 Testing
