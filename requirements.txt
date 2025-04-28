@@ -1,0 +1,13 @@
+aiofiles
+aiohttp
+beautifulsoup4
+pandas
+psycopg2-binary
+pytest
+pytest-asyncio
+pytest-cov
+pytest-mock
+python-dotenv
+requests
+setuptools
+sqlalchemy
