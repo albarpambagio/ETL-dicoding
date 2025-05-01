@@ -62,9 +62,9 @@ git clone https://github.com/yourusername/etl-pipeline.git
 cd etl-pipeline
 
 # 2. Create and activate virtual environment
-uv venv venv
+uv venv 
 source venv/bin/activate      # Linux/macOS
-.\venv\Scripts\activate       # Windows
+.venv\Scripts\activate      # Windows
 
 # 3. Install dependencies
 uv pip install -e ".[dev]"
@@ -75,7 +75,7 @@ uv pip install -e ".[dev]"
 ```bash
 python -m venv venv
 source venv/bin/activate      # Linux/macOS
-.\venv\Scripts\activate       # Windows
+.venv\Scripts\activate      # Windows
 pip install -e .
 ```
 
