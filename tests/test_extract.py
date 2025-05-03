@@ -34,22 +34,26 @@ def mock_product_card():
 # --- Tests ---
 @pytest.mark.asyncio
 async def test_fetch_content_success():
-    # Create a mock session
-    mock_session = AsyncMock()
-    
     # Create a mock response
     mock_response = AsyncMock()
     mock_response.status = 200
-    mock_response.text = AsyncMock(return_value=SAMPLE_HTML)
+    mock_response.text.return_value = SAMPLE_HTML
     
-    # Set up the async context manager chain
-    mock_session.get.return_value.__aenter__.return_value = mock_response
+    # Create a mock client session that properly handles async context
+    mock_session = MagicMock()
+    
+    # Create a mock for the async context manager returned by get()
+    mock_get_context = AsyncMock()
+    mock_get_context.__aenter__.return_value = mock_response
+    mock_get_context.__aexit__.return_value = None
+    
+    # Configure the session.get() to return our context manager
+    mock_session.get.return_value = mock_get_context
     
     # Create a proper semaphore mock
     mock_semaphore = AsyncMock()
-    # Simulate semaphore __aenter__ and __aexit__
-    mock_semaphore.__aenter__ = AsyncMock(return_value=None)
-    mock_semaphore.__aexit__ = AsyncMock(return_value=None)
+    mock_semaphore.__aenter__.return_value = None
+    mock_semaphore.__aexit__.return_value = None
     
     # Call the function
     content = await fetch_content(
@@ -71,6 +75,8 @@ async def test_fetch_content_success():
         }
     )
     mock_response.text.assert_awaited_once()
+    mock_semaphore.__aenter__.assert_awaited_once()
+    mock_semaphore.__aexit__.assert_awaited_once()
 
 def test_extract_product_data(mock_product_card):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
